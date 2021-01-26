@@ -1,6 +1,6 @@
 #ifndef __SPLAY_TREE__
 #define __SPLAY_TREE__
-#include "BinarySearchTree.h"
+#include "BinarySearchTree.hpp"
 
 template <typename Comparable>
 class SplayTree : public BinarySearchTree<Comparable>
