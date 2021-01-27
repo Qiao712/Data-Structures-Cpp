@@ -1,9 +1,9 @@
 #include<iostream>
-#include"Tree\AVLTree.h"
-#include"Tree\BinarySearchTree.h"
-#include"Tree\SplayTree.h"
-#include"List\Vector.h"
-#include"List\List.h"
+#include"Tree\AVLTree.hpp"
+#include"Tree\BinarySearchTree.hpp"
+#include"Tree\SplayTree.hpp"
+#include"List\Vector.hpp"
+#include"List\List.hpp"
 
 
 using namespace std;
@@ -59,27 +59,9 @@ class B:public A{
 };
 
 int main(){
-    List<int> l;
-
-    for(int i = 0; i<10; i++){
-        l.push_back(i);
-    }
-
-    List<int> l2(l);
-
-    cout<<l.size()<<endl;
-
-    while(!l.empty()){
-        cout<<l.back()<<endl;
-        l.pop_back();
-    }
-    cout<<"--------------------"<<endl;
-    auto i = l2.find(3);
-    i = l2.erase(i);
-    l2.insert(i, 3);
-    for(auto i = l2.begin(); i != l2.end(); i++){
-        cout<<*i<<endl;
-    }
+    cout<<"aaa";
+    char a[16];
+    cout<<sizeof(a)<<"bytes";
 }
 
 
