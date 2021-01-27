@@ -3,7 +3,8 @@ template<typename Comparable>
 class LeftistHeap {
 //对外接口
 public:
-    LeftistHeap()       { }
+    LeftistHeap()       = default;
+    LeftistHeap(Comparable elements[], UINT n);             //用多个元素初始化数组，调用buildHeap
     LeftistHeap(const LeftistHeap& rhs);
     ~LeftistHeap()      {clear();}
 
@@ -14,7 +15,6 @@ public:
     void                clear();                            //清空堆,接口，启动clear_recursion
     bool                empty();
     const LeftistHeap&  operator=(const LeftistHeap& rhs);   //启动copy()
-
 
 //核心算法
 private:
@@ -29,8 +29,9 @@ private:
     Node* merge(Node* h1, Node* h2);                         //合并-启动
     void  clear_recursion(Node* at);                         //递归地删除
     Node* copy(const Node* h);                               //递归地复制
+    void  buildHeap(Comparable elements[], UINT n);          //传入数组，以O(N)建立堆
 
-    void                print(Node* r);
+    //void                print(Node* r);
 };
 
 //----------------------------------------------------------------------------------------------
@@ -81,11 +82,44 @@ void LeftistHeap<Comparable>::clear_recursion(Node* at){
     delete at;
     return;
 }
+
+template<typename Comparable>
+void LeftistHeap<Comparable>::buildHeap(Comparable elements[], UINT n){
+    Node** queue = new Node*[n];
+    for(int i = 0; i<n; i++){
+        queue[i] = new Node;
+        queue[i]->element = elements[i];
+    }
+
+    //手打循环队列
+    int f = 0;      //front
+    int r = n-1;    //rear
+    Node *h1, *h2, *h3;
+    for(int i = 0; i<n-1; i++){
+        h1 = queue[f++];
+        if(f >= n) f = 0;
+        
+        h2 = queue[f++];
+        if(f >= n) f = 0;
+        
+        h3 = merge(h1, h2);
+        
+        if(++r >= n) r = 0;
+        queue[r] = h3;
+    }
+
+    root = h3;
+}
 //---------------------------------------------------------------------------------------------
 
 template<typename Comparable>
 LeftistHeap<Comparable>::LeftistHeap(const LeftistHeap& rhs){
     *this = rhs;
+}
+
+template<typename Comparable>
+LeftistHeap<Comparable>::LeftistHeap(Comparable elements[], UINT n){
+    buildHeap(elements, n);
 }
 
 template<typename Comparable>
@@ -102,15 +136,15 @@ void LeftistHeap<Comparable>::insert(const Comparable& element) {
     root = merge(root, node);
 }
 
-template<typename Comparable>
-void LeftistHeap<Comparable>::print(LeftistHeap<Comparable>::Node* r) {
-    if (r == nullptr) return;
+// template<typename Comparable>
+// void LeftistHeap<Comparable>::print(LeftistHeap<Comparable>::Node* r) {
+//     if (r == nullptr) return;
 
-    cout << r->element << endl;
+//     cout << r->element << endl;
 
-    print(r->left);
-    print(r->right);
-}
+//     print(r->left);
+//     print(r->right);
+// }
 
 template<typename Comparable>
 void LeftistHeap<Comparable>::merge(const LeftistHeap& rhs){

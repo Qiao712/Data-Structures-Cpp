@@ -3,11 +3,12 @@
 
 using namespace std;
 
-// #include"Tree\AVLTree.hpp"
-// #include"Tree\BinarySearchTree.hpp"
-// #include"Tree\SplayTree.hpp"
-// #include"List\Vector.hpp"
-// #include"List\List.hpp"
+#include"Tree\AVLTree.hpp"
+#include"Tree\BinarySearchTree.hpp"
+#include"Tree\SplayTree.hpp"
+#include"List\Vector.hpp"
+#include"List\List.hpp"
+#include"PriorityQueue(Heap)\LeftistHeap.hpp"
 
 
 
@@ -81,12 +82,11 @@ struct D{
     int c: 1;
 };
 int main(){
-    cout<<"aaa";
-    char a[16];
-    cout<<sizeof(a)<<" bytes"<<endl;
-    cout<<sizeof(A)<<" bytes"<<endl;
-    cout<<sizeof(B)<<endl;
-    cout<<sizeof(C)<<endl;
-    cout<<sizeof(D)<<endl;
+    int a[10] = {21,55,12,3,66,5,12,0,9,44};
+    LeftistHeap<int> lh(a,10);
+    while(!lh.empty()){
+        cout<<lh.getMin()<<endl;
+        lh.deleteMin();
+    }
 }
 
