@@ -1,5 +1,5 @@
 #define __AVLTREE_NODE__                                                    //宏标记 启用BinarySearchTree的Node中height的定义
-#include"BinarySearchTree_WithHeightInformation.h"                          //引用专门用来继承的带有高度信息的二叉查找树
+#include"BinarySearchTree_WithHeightInformation.hpp"                          //引用专门用来继承的带有高度信息的二叉查找树
 #define BinarySearchTree BinarySearchTree_WithHeightInformation
 
 template<typename Comparable>
