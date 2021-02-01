@@ -10,6 +10,7 @@ class AVLTree : public BinarySearchTree<Comparable>{
         void insert(const Comparable& x);                                   //插入-接口,复写
         void remove(const Comparable& x);                                   //删除-接口，删除指定节点（非懒惰删除）
     private:
+        using BinarySearchTree<Comparable>::root;
         int   getHeight(Node* t);
         Node* insert(const Comparable& x, Node* t);                         //插入,复写
         Node* singleRotationLeft(Node* root);                               //单旋转，左边高
@@ -190,14 +191,14 @@ typename AVLTree<Comparable>::Node* AVLTree<Comparable>::doubleRotationRight(Nod
 template<typename Comparable>
 void AVLTree<Comparable>::insert(const Comparable& x){
     BinarySearchTree<Comparable>::size_current++;
-    BinarySearchTree<Comparable>::root = insert(x, BinarySearchTree<Comparable>::root);
+    root = insert(x, root);
 }
 
 template<typename Comparable>
 void AVLTree<Comparable>::remove(const Comparable& x){
     //保证存在，因为要对高度进行更新，不存在可不行
     if(BinarySearchTree<Comparable>::contains(x)){
-        BinarySearchTree<Comparable>::root = remove(x, BinarySearchTree<Comparable>::root);
+        root = remove(x, root);
     }
 }
 

@@ -9,6 +9,7 @@ using namespace std;
 #include"List\Vector.hpp"
 #include"List\List.hpp"
 #include"PriorityQueue(Heap)\LeftistHeap.hpp"
+#include"AlgorithmAnalysis\Quickselect.hpp"
 
 
 
@@ -81,12 +82,12 @@ struct D{
     int b: 1;
     int c: 1;
 };
+
 int main(){
     int a[10] = {21,55,12,3,66,5,12,0,9,44};
-    LeftistHeap<int> lh(a,10);
-    while(!lh.empty()){
-        cout<<lh.getMin()<<endl;
-        lh.deleteMin();
-    }
+    cout<<Quickselect(a, 10, 6);
+    // for(auto i: a){
+    //     cout<<i<<endl;
+    // }
 }
 

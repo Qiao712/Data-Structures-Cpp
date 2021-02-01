@@ -104,9 +104,3 @@ void getPrime2(int n){
         }
     }
 }
-int main(){
-    for(int i = 0; i<31; i++){
-        cout<<QuickPow2(2,i)<<endl;
-    }
-    
-}

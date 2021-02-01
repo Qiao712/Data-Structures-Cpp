@@ -13,6 +13,8 @@ public:
     bool                 contain(const Comparable &x); //复写contain，添加把被访问元素旋转上来的操作
     bool                 remove(const Comparable &x);  //复写remove，使用把目标元素旋转上来的方式进行
 private:
+    using BinarySearchTree<Comparable>::root;
+
     Node *splay(const Comparable &x, Node *at, bool &left_or_right, int &length); //伸展，递归的，将元素x旋转到根上
 
     Node *doubleRotationLeft(Node *at); //双旋转
@@ -31,7 +33,7 @@ bool SplayTree<Comparable>::contain(const Comparable &x)
 {
     bool t;
     int length;
-    BinarySearchTree<Comparable>::root = splay(x, BinarySearchTree<Comparable>::root, t, length);
+    root = splay(x, root, t, length);
 
     if (length == 0)
         return true;
@@ -75,7 +77,7 @@ typename SplayTree<Comparable>::Node *SplayTree<Comparable>::splay(const Compara
     }
 
     //根处的旋转情况
-    if (length == 1 && at == BinarySearchTree<Comparable>::root)
+    if (length == 1 && at == root)
     {
         if (left_or_right == LEFT)
             at = singleRotationLeft(at);
@@ -116,7 +118,7 @@ const Comparable &SplayTree<Comparable>::findMin()
     //旋转上来
     bool t;
     int length;
-    BinarySearchTree<Comparable>::root = splay(x, BinarySearchTree<Comparable>::root, t, length);
+    root = splay(x, root, t, length);
 
     return x;
 }
@@ -129,7 +131,7 @@ const Comparable &SplayTree<Comparable>::findMax()
     //旋转上来
     bool t;
     int length;
-    BinarySearchTree<Comparable>::root = splay(x, BinarySearchTree<Comparable>::root, t, length);
+    root = splay(x, root, t, length);
 
     return x;
 }
@@ -141,19 +143,19 @@ bool SplayTree<Comparable>::remove(const Comparable &x)
 
     BinarySearchTree<Comparable>::size_current--;
 
-    Node *right = BinarySearchTree<Comparable>::root->right;
-    Node *left  = BinarySearchTree<Comparable>::root->left;
-    delete BinarySearchTree<Comparable>::root;
+    Node *right = root->right;
+    Node *left  = root->left;
+    delete root;
 
     //没有左子树
     if (left == nullptr){
-        BinarySearchTree<Comparable>::root = right;
+        root = right;
         return true;
     }
 
-    BinarySearchTree<Comparable>::root = left;                                    //成为新根
+    root = left;                                    //成为新根
     findMax();                                                                    //找到最大值并旋转上来
-    BinarySearchTree<Comparable>::root->right = right;
+    root->right = right;
 
     return true;
 }

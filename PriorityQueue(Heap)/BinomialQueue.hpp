@@ -19,7 +19,7 @@ public:
     void        insert(const Comparable& element);                                 //插入
     void        merge(BinomialQueue& rhs);//<-------------------------核心算法--//将rhs并入该对象，rhs将被清空
     void        merge_copy(const BinomialQueue& rhs);                           //将rhs并入该对象，rhs不会被清空
-    Comparable     getMin() const;                                                 //获取最小值
+    Comparable  getMin() const;                                                 //获取最小值
     void        deleteMin();                                                    //删除最小值
     size_type   size() const;                                                   //获取大小
     
@@ -104,6 +104,10 @@ void BinomialQueue<Comparable>::clearTree(Node* root){
 template<typename Comparable>
 void BinomialQueue<Comparable>::merge(BinomialQueue& rhs){
     if(rhs.size_current == 0) return;
+    if(&rhs == this){                   //处理与自己合并的特殊情况
+        //
+        return;
+    }
     size_current += rhs.size_current;
 
     Node* carry = nullptr;              //进位上来的
