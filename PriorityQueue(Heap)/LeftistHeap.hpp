@@ -1,3 +1,5 @@
+#ifndef _LEFTIST_HEAP_
+#define _LEFTIST_HEAP_
 using UINT = unsigned int;
 template<typename Comparable>
 class LeftistHeap {
@@ -179,3 +181,4 @@ const LeftistHeap<Comparable>& LeftistHeap<Comparable>::operator=(const LeftistH
 
     return rhs;
 }
+#endif

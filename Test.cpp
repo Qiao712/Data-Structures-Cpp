@@ -10,6 +10,7 @@ using namespace std;
 #include"List\List.hpp"
 #include"PriorityQueue(Heap)\LeftistHeap.hpp"
 #include"AlgorithmAnalysis\Quickselect.hpp"
+#include"DisjointSet\DisjointSet.hpp"
 
 
 
@@ -84,10 +85,17 @@ struct D{
 };
 
 int main(){
-    int a[10] = {21,55,12,3,66,5,12,0,9,44};
-    cout<<Quickselect(a, 10, 6);
     // for(auto i: a){
     //     cout<<i<<endl;
     // }
+    DisjointSet d(100);
+
+    cout<<d.hasRelation(1,2)<<endl;
+    d.unionSet(1,2);
+    d.unionSet(3,4);
+    cout<<d.hasRelation(1,2)<<endl;
+    cout<<d.hasRelation(3,4)<<endl;
+    //d.unionSet(2,3);
+    cout<<d.hasRelation(1,4)<<endl;
 }
 

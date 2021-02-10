@@ -1,3 +1,5 @@
+#ifndef _BINARY_HEAP_
+#define _BINARY_HEAP_
 #include<vector>
 using namespace std;
 using UINT = unsigned int;
@@ -111,3 +113,4 @@ void BinaryHeap<Comparable>::percolateDown(UINT objective){
 
     array[hole] = objective_element;
 }
+#endif

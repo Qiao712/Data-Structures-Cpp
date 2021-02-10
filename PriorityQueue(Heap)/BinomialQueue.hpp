@@ -1,3 +1,5 @@
+#ifndef _BINOMIAL_QUEUE_
+#define _BINOMIAL_QUEUE_
 #include<vector>
 const int NUM_OF_TREE_DEFAULT = 64;    //默认64课树，最多2^64个节点
 template<typename Comparable>
@@ -238,3 +240,4 @@ template<typename Comparable>
 typename BinomialQueue<Comparable>::size_type BinomialQueue<Comparable>::size() const{
     return size_current;
 }
+#endif

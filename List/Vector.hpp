@@ -1,3 +1,5 @@
+#ifndef _VECTOR_
+#define _VECTOR_
 template<typename Element>
 class Vector{
     public:
@@ -139,3 +141,4 @@ void Vector<Element>::reserve(unsigned int size_){
     elements = new_elements;
     
 }
+#endif

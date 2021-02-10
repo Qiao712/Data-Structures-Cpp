@@ -1,3 +1,5 @@
+#ifndef _LIST_
+#define _LIST_
 template<typename Element>
 class List{
     struct Node{
@@ -224,3 +226,4 @@ typename List<Element>::iterator List<Element>::erase(const iterator& pos){
     
     return pos_next;
 }
+#endif
