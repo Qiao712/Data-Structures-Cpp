@@ -1,3 +1,5 @@
+#ifndef _QUICKSELECT_
+#define _QUICKSELECT_
 //基于快速排序思想选择问题算法
 //选择第k最小值
 #include"SortingAlgorithm\InsertionSort.hpp"
@@ -42,3 +44,4 @@ template<typename Element>
 Element Quickselect(Element a[], int n, int k){
     return _Quickselect(a, k, 0, n-1);
 }
+#endif

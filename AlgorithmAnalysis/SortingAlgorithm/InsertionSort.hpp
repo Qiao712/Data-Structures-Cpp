@@ -1,3 +1,5 @@
+#ifndef _INSERTIONSORT_
+#define _INSERTIONSORT_
 template<typename Element>
 void InsertionSort(Element a[], int n){
     int j,tmp;
@@ -12,3 +14,4 @@ void InsertionSort(Element a[], int n){
         a[j] = tmp;
     }
 }
+#endif

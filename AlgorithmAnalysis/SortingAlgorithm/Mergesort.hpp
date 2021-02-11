@@ -1,3 +1,5 @@
+#ifndef _MERGESORT_
+#define _MERGESORT_
 template<typename Element>
 void _Mergesort(Element a[], Element tmp[], int left, int right){
     if(right == left) return;
@@ -30,3 +32,4 @@ void Mergesort(Element a[], int n){
     _Mergesort(a, tmp, 0, n-1);
     delete[] tmp;
 }
+#endif

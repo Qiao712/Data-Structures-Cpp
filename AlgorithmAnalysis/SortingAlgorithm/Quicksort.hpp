@@ -1,3 +1,5 @@
+#ifndef _QUICKSORT_
+#define _QUICKSORT_
 #include<InsertionSort.hpp>
 
 //三数中值分割法找到pivot,将pivot放到right-1位置上
@@ -41,3 +43,4 @@ template<typename Element>
 void Quicksort(Element a[], int n){
     _Quicksort(a, 0, n-1);
 }
+#endif

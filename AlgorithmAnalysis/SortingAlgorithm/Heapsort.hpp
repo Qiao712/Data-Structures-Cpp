@@ -1,3 +1,5 @@
+#ifndef _HEAPSORT_
+#define _HEAPSORT_
 inline int getLeftChild(int i){
     return i*2 + 1;
 }
@@ -30,3 +32,4 @@ void Heapsort(Element a[], int n){
         percolateDown(a, i, 0);    //堆在减小不要传n
     }
 }
+#endif

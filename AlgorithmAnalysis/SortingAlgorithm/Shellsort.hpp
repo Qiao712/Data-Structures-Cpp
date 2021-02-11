@@ -1,3 +1,5 @@
+#ifndef _SHELLSORT_
+#define _SHELLSORT_
 template<typename Element>
 void Shellsort(Element a[], int n){
     int j,tmp;
@@ -10,3 +12,4 @@ void Shellsort(Element a[], int n){
         }
     }
 }
+#endif
