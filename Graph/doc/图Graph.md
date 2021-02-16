@@ -20,6 +20,7 @@
 * complete graph 完全图：每一对顶点之间都存在一条边的图
 * indegree 入度：v的入度为边(u,v)的数量，即指向该点的边的数量。
 * outdegree 出度
+* breadth-first search(BFS) 广度优先搜索：按层处理顶点，距开始点最近的那些顶点首先被处理。
 
 ## 图的表示/储存
 ### 邻接矩阵(adjacency matrix): 储存稠密的(dense)图

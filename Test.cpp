@@ -11,7 +11,7 @@ using namespace std;
 #include"PriorityQueue(Heap)\LeftistHeap.hpp"
 #include"AlgorithmAnalysis\Quickselect.hpp"
 #include"DisjointSet\DisjointSet.hpp"
-
+#include"Graph/Graph.hpp"
 
 
 // struct Node{
@@ -85,17 +85,18 @@ struct D{
 };
 
 int main(){
-    // for(auto i: a){
-    //     cout<<i<<endl;
-    // }
-    DisjointSet d(100);
-
-    cout<<d.hasRelation(1,2)<<endl;
-    d.unionSet(1,2);
-    d.unionSet(3,4);
-    cout<<d.hasRelation(1,2)<<endl;
-    cout<<d.hasRelation(3,4)<<endl;
-    //d.unionSet(2,3);
-    cout<<d.hasRelation(1,4)<<endl;
+    Graph graph(10);
+    graph.add(1,2);
+    graph.add(2,3);
+    graph.add(3,4);
+    graph.add(4,5);
+    graph.add(5,6);
+    graph.add(5,7);
+    graph.add(4,8);
+    graph.remove(4,8);
+    graph.print_BF(1);
+    cout<<endl;
+    graph.printAdjacency();
 }
+
 
