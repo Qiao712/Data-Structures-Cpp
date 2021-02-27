@@ -12,20 +12,20 @@ const int M = 5001; //最大边数
 const int N = 1000; //最大点数
 struct Edge{
     int next = NONE;
-    int c;  //容量
-    int from; //因为要倒着储存路径
+    int c;          //容量
+    int from;       //因为要倒着储存路径
     int to;
 }edge[M*2];
-int cnt = 2;    //编号从2开始，才能通过i^1得到其另一半，作为反向边
+int cnt = 2;        //编号从2开始，才能通过i^1得到其另一半，作为反向边
 int head[N];
 
-int n,m,s,t;    //分别表示点的个数、有向边的个数、源点序号、汇点序号
+int n,m,s,t;        //分别表示点的个数、有向边的个数、源点序号、汇点序号
 
 //BFS找到一条增广路径
-int path[N]; //储存一条增广路径，path[i] 路径上进入i的边
+int path[N];        //储存一条增广路径，path[i] 路径上进入i的边
 bool visit[N];
 bool bfs(){
-    for(int i = 0; i<=n; i++) visit[i] = path[i] = 0;//清理
+    for(int i = 0; i<=n; i++) visit[i] = path[i] = 0;
 
     queue<int> q;
     q.push(s);
@@ -40,7 +40,7 @@ bool bfs(){
             if(edge[i].c == 0 || visit[to]) continue;
 
             path[to] = i;
-            if(to == t) return true;  //碰到收点终止
+            if(to == t) return true;
             q.push(to);
             visit[to] = true;
         }
@@ -52,7 +52,8 @@ bool bfs(){
 long long Edmond_Karp(){
     long long max_flow = 0;        
     while(true){
-        if(!bfs()) break;  //未找到，结束算法
+        //未找到，结束算法
+        if(!bfs()) break;
 
         //找到该路径上容量最小的边的容量
         int delta = numeric_limits<int>::max();

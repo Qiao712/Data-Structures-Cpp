@@ -55,6 +55,12 @@ add(v, w){
 * 最短路径
     * 出现负值圈(negative-cost cycle)时，该问题不确定
     * 单源最短路：
-        * Dijkstra     O()
+        * Dijkstra     O(M logN) （使用二叉堆）
         * Bellman-Ford O(NM)
     * 任意两节点间最短路：Floyd O(N^3)
+
+* 最大网络流 
+    * Push-Relabel算法(HLPP优化，BFS优化，GAP优化)
+
+* 最小生成树
+    * Prim O(M logN) （使用二叉堆）
