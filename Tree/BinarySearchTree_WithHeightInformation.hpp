@@ -16,7 +16,7 @@ class BinarySearchTree_WithHeightInformation{
         using size_type = unsigned int;
 
         BinarySearchTree_WithHeightInformation() = default;
-        ~BinarySearchTree_WithHeightInformation();
+        virtual ~BinarySearchTree_WithHeightInformation();
         
         const Comparable&       findMin() const;                            //返回最小元素
         const Comparable&       findMax() const;                            //返回最大元素

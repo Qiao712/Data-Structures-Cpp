@@ -85,18 +85,8 @@ struct D{
 };
 
 int main(){
-    Graph graph(10);
-    graph.add(1,2);
-    graph.add(2,3);
-    graph.add(3,4);
-    graph.add(4,5);
-    graph.add(5,6);
-    graph.add(5,7);
-    graph.add(4,8);
-    graph.remove(4,8);
-    graph.print_BF(1);
-    cout<<endl;
-    graph.printAdjacency();
+    SplayTree<int> a;
+    
 }
 
 
