@@ -103,4 +103,3 @@ void getPrime2(int n){
             //所以在后面的循环中 i_current * primes[k]一定会被某个更大的i筛掉（这个i就是 (i_current * primes[k])/primes[j])
         }
     }
-}

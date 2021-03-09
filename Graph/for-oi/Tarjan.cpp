@@ -1,3 +1,4 @@
+/*求无向图的割点*/
 #include<iostream>
 using namespace std;
 
