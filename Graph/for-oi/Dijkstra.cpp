@@ -69,8 +69,6 @@ void print(int r){
 }
 
 int main(){
-    if(freopen("in.txt", "r", stdin) == nullptr) cout<<"error\n";
-    freopen("out.txt", "w", stdout);
     int s;
     cin>>n>>m>>s;
 
