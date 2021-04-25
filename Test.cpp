@@ -87,6 +87,21 @@ struct D{
 int main(){
     SplayTree<int> a;
     
+    a.insert(12);
+    a.insert(45);
+
+    a.insert(6);
+    a.insert(7);
+
+    a.remove(6);
+    cout<<"aaaaaaaaa"<<endl;
+
+    cout<<a.contain(6)<<endl;
+    cout<<a.contain(6)<<endl;
+    cout<<a.contain(999)<<endl;
+    cout<<a.contain(6)<<endl;
+    cout<<a.contain(7)<<endl;
+    cout<<a.contain(12)<<endl;
 }
 
 

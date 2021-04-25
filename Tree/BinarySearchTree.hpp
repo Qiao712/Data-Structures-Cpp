@@ -1,10 +1,9 @@
 /*
-*规定右子节点大于其父节点，左子节点小于其夫节点
+* 规定右子节点大于 等于 其父节点，左子节点小于其夫节点
+* 重复加入：直接插入新节点，不计数
 */
 #ifndef __BINARY_SEARCH_TREE__
 #define __BINARY_SEARCH_TREE__
-#include<iostream>
-using namespace std;
 
 template<typename Comparable>
 class BinarySearchTree{
@@ -22,7 +21,7 @@ class BinarySearchTree{
         
         const Comparable&       findMin() const;                            //返回最小元素
         const Comparable&       findMax() const;                            //返回最大元素
-        bool                    contains(const Comparable& x) const;        //是否包含该元素
+        bool                    contain(const Comparable& x) const;        //是否包含该元素
         bool                    empty() const;                              //是否为空
         size_type               size() const;                               //返回大小
         
@@ -31,8 +30,8 @@ class BinarySearchTree{
         void                    remove(const Comparable& x);                //移除接口，调用void remove_recursion(const Comparable& x, Node* t);  
 
         BinarySearchTree&       operator=(const BinarySearchTree& rhs);     //调用Node* copy_recursion(Node* t);
-        void                    print_(Node* at);
-        void                    print();
+        //void                    print_(Node* at);
+        //void                    print();
         
     protected:
         Node*                   root = nullptr;
@@ -173,18 +172,18 @@ BinarySearchTree<Comparable>::~BinarySearchTree(){
     clear();
 }
 
-template<typename Comparable>
-void BinarySearchTree<Comparable>::print(){
-    print_(root);
-}
+// template<typename Comparable>
+// void BinarySearchTree<Comparable>::print(){
+//     print_(root);
+// }
 
-template<typename Comparable>
-void BinarySearchTree<Comparable>::print_(Node* at){
-    if(at == nullptr) return;
-    std::cout<<at->element<<' '<<(at->left ? at->left->element : '\0')<<' '<<(at->right ? at->right->element : '\0')<<endl;
-    print_(at->right);
-    print_(at->left);
-}
+// template<typename Comparable>
+// void BinarySearchTree<Comparable>::print_(Node* at){
+//     if(at == nullptr) return;
+//     std::cout<<at->element<<' '<<(at->left ? at->left->element : '\0')<<' '<<(at->right ? at->right->element : '\0')<<endl;
+//     print_(at->right);
+//     print_(at->left);
+// }
 
 template<typename Comparable>
 const Comparable& BinarySearchTree<Comparable>::findMax() const{
@@ -218,7 +217,7 @@ void BinarySearchTree<Comparable>::remove(const Comparable& x){
 }
 
 template<typename Comparable>
-bool BinarySearchTree<Comparable>::contains(const Comparable& x) const{
+bool BinarySearchTree<Comparable>::contain(const Comparable& x) const{
     if(find(x, root)) return true;
     else        return false;
 }
