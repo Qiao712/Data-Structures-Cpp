@@ -103,5 +103,3 @@ int main(){
     cout<<a.contain(7)<<endl;
     cout<<a.contain(12)<<endl;
 }
-
-

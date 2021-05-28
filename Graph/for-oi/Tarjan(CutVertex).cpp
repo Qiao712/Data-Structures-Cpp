@@ -61,7 +61,7 @@ int main(){
     for(int j = head[1]; j!=0; j = edges[j].next)
         if(parent[edges[j].to] == 1) child++;
     art[1] = child > 1 ? true : false;
-
+    
     for(int i = 1; i<=n; i++){
         if(art[i]) cout<<i<<' ';
     }
