@@ -43,7 +43,8 @@
         "xutility": "cpp",
         "climits": "cpp",
         "algorithm": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "list": "cpp"
     },
     "C_Cpp.dimInactiveRegions": false
 }

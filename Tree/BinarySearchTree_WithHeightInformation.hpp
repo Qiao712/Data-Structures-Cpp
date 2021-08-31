@@ -23,8 +23,8 @@ class BinarySearchTree_WithHeightInformation{
         bool                    contains(const Comparable& x) const;        //是否包含该元素
         bool                    empty() const;                              //是否为空
         size_type               size() const;                               //返回大小
-        
         void                    clear();                                    //清空接口，调用void clear_recursion(Node* t);
+        
         void                    insert(const Comparable& x);                //插入接口，调用void insert(const Comparable& x, Node* t); 
         void                    remove(const Comparable& x);                //移除接口，调用void remove_recursion(const Comparable& x, Node* t);  
 

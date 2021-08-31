@@ -64,9 +64,15 @@ class List{
         iterator        find(const Element& rhs);
         iterator        insert(const iterator& p, const Element& element);
         iterator        erase(const iterator& p);
+
+        template<typename Compare> void sort(Compare cmp);
     private:
         Node*           header;
         Node*           tail;
+        
+        //合并与归并排序， TODO
+        template<typename Compare> Node* merge(Node* &first, Node* mid, Node* last);   //合并,保证last不被改变，并改变first
+        template<typename Compare> Node* merge_sort(Node* first, Node* last);          //归并排序，保证last不变，并改变first
 };
 
 template<typename Element>

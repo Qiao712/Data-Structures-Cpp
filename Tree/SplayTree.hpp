@@ -6,11 +6,15 @@
 #include "BinarySearchTree.hpp"
 
 template <typename Comparable>
-class SplayTree : public BinarySearchTree<Comparable>
+class SplayTree : private BinarySearchTree<Comparable>
 {
     using Node = typename BinarySearchTree<Comparable>::Node;
 
 public:
+    using BinarySearchTree<Comparable>::empty;                         
+    using BinarySearchTree<Comparable>::size;
+    using BinarySearchTree<Comparable>::clear;
+
     const Comparable&    findMin(); //返回最小元素
     const Comparable&    findMax(); //返回最大元素
     bool                 contain(const Comparable &x); //复写contain，添加把被访问元素旋转上来的操作
