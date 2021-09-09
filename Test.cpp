@@ -3,15 +3,8 @@
 
 using namespace std;
 
-#include"Tree\AVLTree.hpp"
 #include"Tree\BinarySearchTree.hpp"
-#include"Tree\SplayTree.hpp"
-#include"List\Vector.hpp"
-#include"List\List.hpp"
-#include"PriorityQueue(Heap)\LeftistHeap.hpp"
-#include"AlgorithmAnalysis\Quickselect.hpp"
-#include"DisjointSet\DisjointSet.hpp"
-#include"Graph/Graph.hpp"
+#include"Tree\AVLTree.hpp"
 
 
 // struct Node{
@@ -85,11 +78,16 @@ struct D{
 };
 
 int main(){
-    AVLTree<int> avlt;
-
-    avlt.insert(34);
-    avlt.insert(42);
-    avlt.insert(333);
-
-    cout<<avlt.findMax()<<endl;
+    AVLTree<int> bst;
+    bst.insert(24);
+    bst.insert(333);
+    bst.insert(2);
+    bst.insert(333);
+    bst.insert(43);
+    bst.insert(34);
+    bst.insert(13);
+    bst.insert(45);
+    
+    cout<<bst.findMax();
+    
 }

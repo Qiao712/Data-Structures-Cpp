@@ -1,22 +1,32 @@
-#define __AVLTREE_NODE__                                                    //宏标记 启用BinarySearchTree的Node中height的定义
-#include"BinarySearchTree_WithHeightInformation.hpp"                          //引用专门用来继承的带有高度信息的二叉查找树
-#define BinarySearchTree BinarySearchTree_WithHeightInformation
+#ifndef  __AVLTREE_TREE__ 
+#define __AVLTREE_TREE__                                                    //宏标记 启用BinarySearchTree的Node中height的定义
+#include "BinarySearchTree.hpp"                                             //引用专门用来继承的带有高度信息的二叉查找树
 
 template<typename Comparable>
-class AVLTree : private BinarySearchTree<Comparable>{
+struct NodeWithHeight{
+    Comparable          element;
+    NodeWithHeight*     right = nullptr;
+    NodeWithHeight*     left  = nullptr;
+    unsigned int height = 0;
+};
+
+template<typename Comparable>
+class AVLTree : private BinarySearchTreeTemplate<Comparable, NodeWithHeight<Comparable>>{
     public:
-        using Node = typename BinarySearchTree<Comparable>::Node;           //使用父类的Node，带有height
+        using Node = NodeWithHeight<Comparable>;           //使用父类的Node，带有height
         
-        using BinarySearchTree<Comparable>::findMin;                            //返回最小元素
-        using BinarySearchTree<Comparable>::findMax;                            //返回最大元素
-        using BinarySearchTree<Comparable>::contains;                           //是否包含该元素
-        using BinarySearchTree<Comparable>::empty;                              //是否为空
-        using BinarySearchTree<Comparable>::size;                               //返回大小
-        using BinarySearchTree<Comparable>::clear;
+        using BinarySearchTreeTemplate<Comparable, Node>::findMin;                            //返回最小元素
+        using BinarySearchTreeTemplate<Comparable, Node>::findMax;                            //返回最大元素
+        using BinarySearchTreeTemplate<Comparable, Node>::contain;                           //是否包含该元素
+        using BinarySearchTreeTemplate<Comparable, Node>::empty;                              //是否为空
+        using BinarySearchTreeTemplate<Comparable, Node>::size;                               //返回大小
+        using BinarySearchTreeTemplate<Comparable, Node>::clear;
         void insert(const Comparable& x);                                   //插入-接口,复写
         void remove(const Comparable& x);                                   //删除-接口，删除指定节点（非懒惰删除）
     private:
-        using BinarySearchTree<Comparable>::root;
+        using BinarySearchTreeTemplate<Comparable, Node>::root;
+        using BinarySearchTreeTemplate<Comparable, Node>::size_current;
+
         int   getHeight(Node* t);
         Node* insert(const Comparable& x, Node* t);                         //插入,复写
         Node* singleRotationLeft(Node* root);                               //单旋转，左边高
@@ -27,11 +37,6 @@ class AVLTree : private BinarySearchTree<Comparable>{
         Node* remove(const Comparable& x, Node* t);                         //递归地删除，并旋转
         void  updateHeight(Node *t, unsigned height);                       //更新高度,将节点t的高度更新为height，并影响子节点
 };
-
-
-
-#ifndef  __AVLTREE_TREE__ 
-#define __AVLTREE_TREE__
 
 //核心算法-----------------------------------------------------------------------
 template<typename Comparable>
@@ -74,7 +79,7 @@ typename AVLTree<Comparable>::Node* AVLTree<Comparable>::remove(const Comparable
         root->right = remove(x, root->right);
     }else{
         if(root->left && root->right){  //有两个子节点
-            Comparable max_in_left = BinarySearchTree<Comparable>::findMax(root->left)->element;
+            Comparable max_in_left = findMax(root->left)->element;
             root->element = max_in_left;
             root->left    = remove(max_in_left, root->left);
         }else if(root->left){
@@ -119,11 +124,6 @@ int AVLTree<Comparable>::getHeight(Node* t){
     else
         return t->height;
 }
-
-// template<typename Comparable>
-// void AVLTree<Comparable>::updateHeight(Node *t, unsigned height){
-    
-// }
 
 template<typename Comparable>
 typename AVLTree<Comparable>::Node* AVLTree<Comparable>::singleRotationLeft(Node *root){
@@ -196,17 +196,16 @@ typename AVLTree<Comparable>::Node* AVLTree<Comparable>::doubleRotationRight(Nod
 //接口-------------------------------
 template<typename Comparable>
 void AVLTree<Comparable>::insert(const Comparable& x){
-    BinarySearchTree<Comparable>::size_current++;
+    size_current++;
     root = insert(x, root);
 }
 
 template<typename Comparable>
 void AVLTree<Comparable>::remove(const Comparable& x){
     //保证存在，因为要对高度进行更新，不存在可不行
-    if(BinarySearchTree<Comparable>::contains(x)){
+    if(contains(x)){
         root = remove(x, root);
     }
 }
 
 #endif
-#undef BinarySearchTree
