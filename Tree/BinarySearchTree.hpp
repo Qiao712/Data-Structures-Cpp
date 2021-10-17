@@ -45,7 +45,7 @@ class BinarySearchTreeTemplate{
         Node*                   copy_recursion(Node* t);                                      //递归实现复制
         Node*                   findMax(Node* t) const;                                       //返回最大元素节点的指针
         Node*                   findMin(Node* t) const;                                       //返回最小元素的指针
-        Node*                   find(const Comparable& x, Node* t);                           //找到包含某元素的节点并返回其其地址
+        Node*                   find(const Comparable& x, Node* t) const;                           //找到包含某元素的节点并返回其其地址
 };
 
 //BinarySearchTree
@@ -59,6 +59,7 @@ Node* BinarySearchTreeTemplate<Comparable, Node>::remove_recursion(const Compara
         return nullptr;
     }else if(x == t->element){  //找到了该元素,进行删除
         if(t->left && t->right){
+            //所储存的元素被复制了一次！（待改进）
             Comparable min_in_right = findMin(t->right)->element;
             t->element = min_in_right;
             t->right = remove_recursion(min_in_right, t->right);
@@ -157,7 +158,7 @@ Node* BinarySearchTreeTemplate<Comparable, Node>::insert(const Comparable& x, No
 }
 
 template<typename Comparable, typename Node>
-Node* BinarySearchTreeTemplate<Comparable, Node>::find(const Comparable& x, Node* t){
+Node* BinarySearchTreeTemplate<Comparable, Node>::find(const Comparable& x, Node* t) const{
     Node* node = t;
     while(node != nullptr){
         if(node->element == x){

@@ -5,6 +5,7 @@ using namespace std;
 
 #include"Tree\BinarySearchTree.hpp"
 #include"Tree\AVLTree.hpp"
+#include"Tree\RedBlackTree.hpp"
 
 
 // struct Node{
@@ -78,16 +79,18 @@ struct D{
 };
 
 int main(){
-    AVLTree<int> bst;
-    bst.insert(24);
-    bst.insert(333);
-    bst.insert(2);
-    bst.insert(333);
-    bst.insert(43);
-    bst.insert(34);
-    bst.insert(13);
-    bst.insert(45);
+    RedBlackTree<int> rbt;
+    int a[] = {10,85,15,70,20,60,30,50,65,80,90,40,5,55};
+    int len = sizeof(a) / sizeof(int);
+    for(int i = 0; i<len; i++){
+        rbt.insert(a[i]);
+    }
     
-    cout<<bst.findMax();
+    rbt.debug();
+
+    cout<<"------------------------------"<<endl;
     
+    rbt.remove(10);
+
+    rbt.debug();
 }

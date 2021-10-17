@@ -29,10 +29,10 @@ class AVLTree : private BinarySearchTreeTemplate<Comparable, NodeWithHeight<Comp
 
         int   getHeight(Node* t);
         Node* insert(const Comparable& x, Node* t);                         //插入,复写
-        Node* singleRotationLeft(Node* root);                               //单旋转，左边高
-        Node* singleRotationRight(Node* root);
-        Node* doubleRotationLeft(Node* root);
-        Node* doubleRotationRight(Node* root);
+        Node* singleRightRotate(Node* root);                               //单旋转，左边高
+        Node* singleLeftRotate(Node* root);
+        Node* doubleRightRotate(Node* root);
+        Node* doubleLeftRotate(Node* root);
 
         Node* remove(const Comparable& x, Node* t);                         //递归地删除，并旋转
         void  updateHeight(Node *t, unsigned height);                       //更新高度,将节点t的高度更新为height，并影响子节点
@@ -49,18 +49,18 @@ typename AVLTree<Comparable>::Node* AVLTree<Comparable>::insert(const Comparable
         //旋转判定
         if(getHeight(t->left) - getHeight(t->right) == 2){
             if(x < t->left->element)
-                t = singleRotationLeft(t);      //左边外侧
+                t = singleRightRotate(t);      //左边外侧
             else
-                t = doubleRotationLeft(t);      //左边内侧
+                t = doubleRightRotate(t);      //左边内侧
         }
     }else{
         t->right = insert(x, t->right);
         //旋转判定
         if(getHeight(t->right) - getHeight(t->left) == 2){
             if(x < t->right->element)
-                t = doubleRotationRight(t);      //右边外侧
+                t = doubleLeftRotate(t);      //右边外侧
             else
-                t = singleRotationRight(t);      //右边内测
+                t = singleLeftRotate(t);      //右边内测
         }
     }
 
@@ -102,15 +102,15 @@ typename AVLTree<Comparable>::Node* AVLTree<Comparable>::remove(const Comparable
     //旋转
     if(getHeight(root->left) - getHeight(root->right) == 2){                //左旋转
         if(getHeight(root->left->left) >= getHeight(root->left->right)){    //单旋转
-            root = singleRotationLeft(root);
+            root = singleRightRotate(root);
         }else{                                                              //双旋转
-            root = doubleRotationLeft(root);
+            root = doubleRightRotate(root);
         }
     }else if(getHeight(root->right) - getHeight(root->left) == 2){          //右旋转
         if(getHeight(root->right->right) >= getHeight(root->right->left)){  //单旋转
-            root = singleRotationRight(root);
+            root = singleLeftRotate(root);
         }else{                                                              //双旋转
-            root = doubleRotationRight(root);
+            root = doubleLeftRotate(root);
         }
     }
 
@@ -126,7 +126,7 @@ int AVLTree<Comparable>::getHeight(Node* t){
 }
 
 template<typename Comparable>
-typename AVLTree<Comparable>::Node* AVLTree<Comparable>::singleRotationLeft(Node *root){
+typename AVLTree<Comparable>::Node* AVLTree<Comparable>::singleRightRotate(Node *root){
     Node* const k = root->left;
     root->left = k->right;
     k->right = root;
@@ -139,7 +139,7 @@ typename AVLTree<Comparable>::Node* AVLTree<Comparable>::singleRotationLeft(Node
 }
 
 template<typename Comparable>
-typename AVLTree<Comparable>::Node* AVLTree<Comparable>::singleRotationRight(Node *root){
+typename AVLTree<Comparable>::Node* AVLTree<Comparable>::singleLeftRotate(Node *root){
     Node* const k = root->right;
     root->right = k->left;
     k->left = root;
@@ -152,9 +152,9 @@ typename AVLTree<Comparable>::Node* AVLTree<Comparable>::singleRotationRight(Nod
 }
 
 template<typename Comparable>
-typename AVLTree<Comparable>::Node* AVLTree<Comparable>::doubleRotationLeft(Node *root){
-    // root->left = singleRotationRight(root->left);   //旋转到外侧
-    // root       = singleRotationLeft(root);
+typename AVLTree<Comparable>::Node* AVLTree<Comparable>::doubleRightRotate(Node *root){
+    // root->left = singleLeftRotate(root->left);   //旋转到外侧
+    // root       = singleRightRotate(root);
     Node* const k3 = root;
     Node* const k1 = root->left;
     Node* const k2 = k1->right;
@@ -173,9 +173,9 @@ typename AVLTree<Comparable>::Node* AVLTree<Comparable>::doubleRotationLeft(Node
 }
 
 template<typename Comparable>
-typename AVLTree<Comparable>::Node* AVLTree<Comparable>::doubleRotationRight(Node *root){
-    // root->right = singleRotationLeft(root->right);  //旋转到外侧
-    // root        = singleRotationRight(root);
+typename AVLTree<Comparable>::Node* AVLTree<Comparable>::doubleLeftRotate(Node *root){
+    // root->right = singleRightRotate(root->right);  //旋转到外侧
+    // root        = singleLeftRotate(root);
     Node* const k3 = root;
     Node* const k1 = root->right;
     Node* const k2 = k1->left;
@@ -203,7 +203,8 @@ void AVLTree<Comparable>::insert(const Comparable& x){
 template<typename Comparable>
 void AVLTree<Comparable>::remove(const Comparable& x){
     //保证存在，因为要对高度进行更新，不存在可不行
-    if(contains(x)){
+    if(contain(x)){
+        size_current--;
         root = remove(x, root);
     }
 }

@@ -24,15 +24,15 @@ private:
 
     Node *splay(const Comparable &x, Node *at, bool &left_or_right, int &length); //伸展，递归的，将元素x旋转到根上
 
-    Node *doubleRotationLeft(Node *at); //双旋转
-    Node *doubleRotationRight(Node *at);
-    Node *singleRotationLeft(Node *at); //单旋转
-    Node *singleRotationRight(Node *at);
+    Node *doubleRightRotation(Node *at); //双旋转
+    Node *doubleLeftRotation(Node *at);
+    Node *singleRightRotation(Node *at); //单旋转
+    Node *singleLeftRotation(Node *at);
 
-    Node *zigZigRotationRight(Node *at); //一字型旋转
-    Node *zigZigRotationLeft(Node *at);
-    Node *zigZagRotationRight(Node *at); //之字形旋转
-    Node *zigZagRotationLeft(Node *at);
+    Node *zigZigLeftRotation(Node *at); //一字型旋转
+    Node *zigZigRightRotation(Node *at);
+    Node *zigZagLeftRotation(Node *at); //之字形旋转
+    Node *zigZagRightRotation(Node *at);
 };
 
 template <typename Comparable>
@@ -87,9 +87,9 @@ typename SplayTree<Comparable>::Node *SplayTree<Comparable>::splay(const Compara
     if (length == 1 && at == root)
     {
         if (left_or_right == LEFT)
-            at = singleRotationLeft(at);
+            at = singleRightRotation(at);
         if (left_or_right == RIGHT)
-            at = singleRotationRight(at);
+            at = singleLeftRotation(at);
 
         length = 0;
     }
@@ -99,16 +99,16 @@ typename SplayTree<Comparable>::Node *SplayTree<Comparable>::splay(const Compara
         if (left_or_right == LEFT)
         {
             if (direct_next == LEFT)
-                at = zigZigRotationLeft(at);
+                at = zigZigRightRotation(at);
             if (direct_next == RIGHT)
-                at = zigZagRotationLeft(at);
+                at = zigZagRightRotation(at);
         }
         else
         {
             if (direct_next == RIGHT)
-                at = zigZigRotationRight(at);
+                at = zigZigLeftRotation(at);
             if (direct_next == LEFT)
-                at = zigZagRotationRight(at);
+                at = zigZagLeftRotation(at);
         }
 
         length = 0;
@@ -168,7 +168,7 @@ bool SplayTree<Comparable>::remove(const Comparable &x)
 }
 
 template <typename Comparable>
-typename SplayTree<Comparable>::Node *SplayTree<Comparable>::singleRotationLeft(Node *at)
+typename SplayTree<Comparable>::Node *SplayTree<Comparable>::singleRightRotation(Node *at)
 {
     Node *k = at->left;
     at->left = k->right;
@@ -178,7 +178,7 @@ typename SplayTree<Comparable>::Node *SplayTree<Comparable>::singleRotationLeft(
 }
 
 template <typename Comparable>
-typename SplayTree<Comparable>::Node *SplayTree<Comparable>::singleRotationRight(Node *at)
+typename SplayTree<Comparable>::Node *SplayTree<Comparable>::singleLeftRotation(Node *at)
 {
     Node *k = at->right;
     at->right = k->left;
@@ -188,37 +188,37 @@ typename SplayTree<Comparable>::Node *SplayTree<Comparable>::singleRotationRight
 }
 
 template <typename Comparable>
-typename SplayTree<Comparable>::Node *SplayTree<Comparable>::doubleRotationLeft(Node *at)
+typename SplayTree<Comparable>::Node *SplayTree<Comparable>::doubleRightRotation(Node *at)
 {
-    at->left = singleRotationRight(at->left); //旋转到外侧
-    at = singleRotationLeft(at);
+    at->left = singleLeftRotation(at->left); //旋转到外侧
+    at = singleRightRotation(at);
 
     return at;
 }
 
 template <typename Comparable>
-typename SplayTree<Comparable>::Node *SplayTree<Comparable>::doubleRotationRight(Node *at)
+typename SplayTree<Comparable>::Node *SplayTree<Comparable>::doubleLeftRotation(Node *at)
 {
-    at->right = singleRotationLeft(at->right); //旋转到外侧
-    at = singleRotationRight(at);
+    at->right = singleRightRotation(at->right); //旋转到外侧
+    at = singleLeftRotation(at);
 
     return at;
 }
 
 template <typename Comparable>
-typename SplayTree<Comparable>::Node *SplayTree<Comparable>::zigZagRotationLeft(Node *at)
+typename SplayTree<Comparable>::Node *SplayTree<Comparable>::zigZagRightRotation(Node *at)
 {
-    return doubleRotationLeft(at);
+    return doubleRightRotation(at);
 }
 
 template <typename Comparable>
-typename SplayTree<Comparable>::Node *SplayTree<Comparable>::zigZagRotationRight(Node *at)
+typename SplayTree<Comparable>::Node *SplayTree<Comparable>::zigZagLeftRotation(Node *at)
 {
-    return doubleRotationRight(at);
+    return doubleLeftRotation(at);
 }
 
 template <typename Comparable>
-typename SplayTree<Comparable>::Node *SplayTree<Comparable>::zigZigRotationLeft(Node *at)
+typename SplayTree<Comparable>::Node *SplayTree<Comparable>::zigZigRightRotation(Node *at)
 {
     Node *g = at;
     Node *p = g->left;
@@ -234,7 +234,7 @@ typename SplayTree<Comparable>::Node *SplayTree<Comparable>::zigZigRotationLeft(
 }
 
 template <typename Comparable>
-typename SplayTree<Comparable>::Node *SplayTree<Comparable>::zigZigRotationRight(Node *at)
+typename SplayTree<Comparable>::Node *SplayTree<Comparable>::zigZigLeftRotation(Node *at)
 {
     Node *g = at;
     Node *p = g->right;
