@@ -5,134 +5,76 @@
 #ifndef __BINARY_SEARCH_TREE__
 #define __BINARY_SEARCH_TREE__
 
+#include "BinaryTreeHelper.hpp"
+
 template<typename Comparable>
-struct DefaultNode{
-    Comparable      element;
-    DefaultNode*    right = nullptr;
-    DefaultNode*    left  = nullptr;
+class BinarySearchTree{
+    struct Node{
+        Comparable element;
+        Node* right;
+        Node* left;
+    };
+    
+    using Helper = BinaryTreeHelper<Node>;
+public:
+    BinarySearchTree() = default;
+    BinarySearchTree(const BinarySearchTree& rhs){
+        size_current = rhs.size_current;
+        root = Helper::doCopy(rhs.root, nullptr);
+    }
+
+    const Comparable&       findMin() const { return Helper::doFindMin(root, nullptr)->element; }
+    const Comparable&       findMax() const { return Helper::doFindMax(root, nullptr)->element; }
+    bool                    contain(const Comparable& x) const { return Helper::doFind(x, root, nullptr) != nullptr; }
+    bool                    empty() const { return size_current == 0; }
+    size_t                  size() const { return size_current; }
+    void                    clear() { size_current = 0; Helper::doClear(root, nullptr); }
+
+    size_t                  insert(const Comparable& x);
+    size_t                  remove(const Comparable& x);     
+
+    BinarySearchTree&       operator=(const BinarySearchTree& rhs);
+
+    void                    _debug(){Helper::doPrint(root, nullptr, 0);}   
+private:
+    Node*                   doRemove(const Comparable& x, Node* t);
+    Node*                   doInsert(const Comparable& x, Node* t);
+
+    size_t size_current = 0;
+    Node* root = nullptr;
 };
 
-template<typename Comparable, typename Node>
-class BinarySearchTreeTemplate{
-    public:
-        using size_type = unsigned int;
-
-        BinarySearchTreeTemplate() = default;
-        virtual ~BinarySearchTreeTemplate();
-        
-        const Comparable&       findMin() const;                            //返回最小元素
-        const Comparable&       findMax() const;                            //返回最大元素
-        bool                    contain(const Comparable& x) const;        //是否包含该元素
-        bool                    empty() const;                              //是否为空
-        size_type               size() const;                               //返回大小
-        
-        void                    clear();                                    //清空接口，调用void clear_recursion(Node* t);
-        void                    insert(const Comparable& x);                //插入接口，调用void insert(const Comparable& x, Node* t); 
-        void                    remove(const Comparable& x);                //移除接口，调用void remove_recursion(const Comparable& x, Node* t);  
-
-        BinarySearchTreeTemplate&       operator=(const BinarySearchTreeTemplate& rhs);     //调用Node* copy_recursion(Node* t);
-        //void                    print_(Node* at);
-        //void                    print();
-        
-    protected:
-        Node*                   root = nullptr;
-        size_type               size_current = 0;
-
-
-        Node*                   insert(const Comparable& x, Node* t);                         //插入
-        void                    clear_recursion(Node* t);                                     //清空
-        Node*                   remove_recursion(const Comparable& x, Node* t);               //移除某元素
-        Node*                   copy_recursion(Node* t);                                      //递归实现复制
-        Node*                   findMax(Node* t) const;                                       //返回最大元素节点的指针
-        Node*                   findMin(Node* t) const;                                       //返回最小元素的指针
-        Node*                   find(const Comparable& x, Node* t) const;                           //找到包含某元素的节点并返回其其地址
-};
-
-//BinarySearchTree
 template<typename Comparable>
-using BinarySearchTree = BinarySearchTreeTemplate<Comparable, DefaultNode<Comparable>>;
-
-/*核心算法--删除节点---------------------------------------------------------------------------------------------------------*/
-template<typename Comparable, typename Node>
-Node* BinarySearchTreeTemplate<Comparable, Node>::remove_recursion(const Comparable& x, Node* t){    
-    if(t == nullptr){
-        return nullptr;
-    }else if(x == t->element){  //找到了该元素,进行删除
-        if(t->left && t->right){
-            //所储存的元素被复制了一次！（待改进）
-            Comparable min_in_right = findMin(t->right)->element;
-            t->element = min_in_right;
-            t->right = remove_recursion(min_in_right, t->right);
-        }else if(t->left){
-            Node* tmp = t;
-            t = t->left;
-            delete tmp;
-        }else{  //只有右节点或无子节点
-            Node* tmp = t;
-            t = t->right;
-            delete tmp;
-        }
-
-        size_current--;
-    }else if(x < t->element){
-        t->left = remove_recursion(x, t->left);
-    }else{
-        t->right = remove_recursion(x, t->right);
-    }
-
-    return t;
-}
-
-template<typename Comparable, typename Node>
-void BinarySearchTreeTemplate<Comparable, Node>::clear_recursion(Node* t){
-    if(t == nullptr) return;
-    clear_recursion(t->left);
-    clear_recursion(t->right);
-
-    delete t;
-}
-
-template<typename Comparable, typename Node>
-Node* BinarySearchTreeTemplate<Comparable, Node>::copy_recursion(Node* t){
-    if(t == nullptr) return nullptr;
-    Node* new_node = new Node;
-    new_node->element = t->element;
-    new_node->left    = copy_recursion(t->left);
-    new_node->right    = copy_recursion(t->right);
-    return new_node;
-}
-
-template<typename Comparable, typename Node>
-Node* BinarySearchTreeTemplate<Comparable, Node>::findMax(Node* t) const{
-    Node* node = t;
-    while(node->right != nullptr){
-        node = node->right;
-    }
-
-    return node;
-}
-
-template<typename Comparable, typename Node>
-Node* BinarySearchTreeTemplate<Comparable, Node>::findMin(Node* t) const{
-    Node* node = t;
-    while(node->left != nullptr){
-        node = node->left;
-    }
-
-    return node;
-}
-
-template<typename Comparable, typename Node>
-Node* BinarySearchTreeTemplate<Comparable, Node>::insert(const Comparable& x, Node* t){
+size_t BinarySearchTree<Comparable>::insert(const Comparable& x){
+    root = doInsert(x, root);
     size_current++;
+    return size_current;
+}
 
+template<typename Comparable>
+size_t BinarySearchTree<Comparable>::remove(const Comparable& x){
+    root = doRemove(x, root);
+    return size_current;
+}
+
+template<typename Comparable>
+BinarySearchTree<Comparable>& BinarySearchTree<Comparable>::operator=(const BinarySearchTree& rhs){
+    if(&rhs == this) return *this;
+    clear();
+    size_current = rhs.size_current;
+    root = Helper::doCopy(rhs.root, nullptr);
+    return *this;
+}
+
+template<typename Comparable>
+typename BinarySearchTree<Comparable>::Node* BinarySearchTree<Comparable>::doInsert(const Comparable& x, Node* t){
     Node* node_new = new Node;
     node_new->element = x;
+    node_new->left = nullptr;
+    node_new->right = nullptr;
 
-    //如果根为空则设为根
     if(t == nullptr){ 
-        t = node_new;
-        return t;
+        return node_new;
     }
 
     Node* node = t;
@@ -157,92 +99,55 @@ Node* BinarySearchTreeTemplate<Comparable, Node>::insert(const Comparable& x, No
     return t;
 }
 
-template<typename Comparable, typename Node>
-Node* BinarySearchTreeTemplate<Comparable, Node>::find(const Comparable& x, Node* t) const{
-    Node* node = t;
-    while(node != nullptr){
-        if(node->element == x){
-            return node;
-        }else if(x < node->element){
-            node = node->left;
+template<typename Comparable>
+typename BinarySearchTree<Comparable>::Node* BinarySearchTree<Comparable>::doRemove(const Comparable& x, Node* t){    
+    Node* last_ptr = nullptr;         //最终指向被删除目标节点的右子树中最小的节点 或 它自己
+    Node* delete_ptr = nullptr;       //最终指向被要删除的目标节点
+    Node* parent = nullptr;           //追踪last_ptr的父节点
+    Node* cur = t;
+
+    while(cur != nullptr){
+        if(x < cur->element){
+            parent = cur;
+            cur = cur->left; 
+        }else if(cur->element < x){
+            parent = cur;
+            cur = cur->right;
         }else{
-            node = node->right;
+            delete_ptr = cur;
+            last_ptr = cur;
+            
+            //右子树不为空
+            if(cur->right != nullptr){
+                parent = cur;
+                last_ptr = cur->right;
+                while(last_ptr->left != nullptr){
+                    parent = last_ptr;
+                    last_ptr = last_ptr->left;
+                }
+                delete_ptr->element = std::move(last_ptr->element);
+            }
+
+            //删除last
+            if(parent == nullptr){              //delete_ptr == last_ptr， last_ptr为根
+                t = last_ptr->left;
+            }else if(delete_ptr == last_ptr){   //delete_ptr == last_ptr 不为根
+                if(last_ptr == parent->left) parent->left = last_ptr->left;
+                else parent->right = last_ptr->left;
+            }else{                              //delete_ptr 有右子树
+                if(last_ptr == parent->left) parent->left = last_ptr->right;
+                else parent->right = last_ptr->right;
+            }
+            delete last_ptr;
+            size_current--;
+
+            break;
         }
     }
-    return nullptr;
+
+    //返回新根
+    return t;
 }
 
-//接口----------------------------------------------------------------------------------------------------------------
-template<typename Comparable, typename Node>
-BinarySearchTreeTemplate<Comparable, Node>::~BinarySearchTreeTemplate(){
-    clear();
-}
-
-// template<typename Comparable, typename Node>
-// void BinarySearchTreeTemplate<Comparable, Node>::print(){
-//     print_(root);
-// }
-
-// template<typename Comparable, typename Node>
-// void BinarySearchTreeTemplate<Comparable, Node>::print_(Node* at){
-//     if(at == nullptr) return;
-//     std::cout<<at->element<<' '<<(at->left ? at->left->element : '\0')<<' '<<(at->right ? at->right->element : '\0')<<endl;
-//     print_(at->right);
-//     print_(at->left);
-// }
-
-template<typename Comparable, typename Node>
-const Comparable& BinarySearchTreeTemplate<Comparable, Node>::findMax() const{
-    return findMax(root)->element;
-}
-
-template<typename Comparable, typename Node>
-const Comparable& BinarySearchTreeTemplate<Comparable, Node>::findMin() const{
-    return findMin(root)->element;
-}
-
-template<typename Comparable, typename Node>
-BinarySearchTreeTemplate<Comparable, Node>&  BinarySearchTreeTemplate<Comparable, Node>::operator=(const BinarySearchTreeTemplate<Comparable, Node>& rhs){
-    if(this == &rhs){
-        clear();
-        root = copy_recursion(rhs.root);
-        size_current = rhs.size_current;
-    }
-
-    return *this;
-}
-
-template<typename Comparable, typename Node>
-void BinarySearchTreeTemplate<Comparable, Node>::insert(const Comparable& x){
-    root = insert(x, root);
-}
-
-template<typename Comparable, typename Node>
-void BinarySearchTreeTemplate<Comparable, Node>::remove(const Comparable& x){
-    root = remove_recursion(x, root);   //size--在remove_recursion
-}
-
-template<typename Comparable, typename Node>
-bool BinarySearchTreeTemplate<Comparable, Node>::contain(const Comparable& x) const{
-    if(find(x, root)) return true;
-    else        return false;
-}
-
-template<typename Comparable, typename Node>
-void BinarySearchTreeTemplate<Comparable, Node>::clear(){
-    clear_recursion(root);
-    size_current = 0;
-    root = nullptr;
-}
-
-template<typename Comparable, typename Node>
-typename BinarySearchTreeTemplate<Comparable, Node>::size_type BinarySearchTreeTemplate<Comparable, Node>::size() const{
-    return size_current;
-}
-
-template<typename Comparable, typename Node>
-bool BinarySearchTreeTemplate<Comparable, Node>::empty() const{
-    return size_current == 0;
-}
 
 #endif
