@@ -309,16 +309,18 @@ bool test_insert(Tree& t, int n){
 
 template<typename Tree, typename Ty>
 bool test_remove(Tree& t, int n){
-    set<int> s;
+    multiset<int> s;
     for(int i = 0; i<n; i++){
-        int r = rand()%10;
+        int r = rand()%100;
         t.insert(r);
         s.insert(r);
         cout<<"insert "<<r<<endl;
     }
 
+    cout<<(t._check() ? "OK" : "WRONG")<<endl;
+    
     for(int i = 0; i<n; i++){
-        int r = rand()%10;
+        int r = rand()%100;
 
         t.remove(r);
         
@@ -327,43 +329,42 @@ bool test_remove(Tree& t, int n){
 
         cout<<"remove "<<r<<" "<<t.size()<<' '<<s.size()<<endl;
     }
+    cout<<(t._check() ? "OK" : "WRONG")<<endl;
 
-    t._debug();
-
-    for(int i : s) cout<<i<<' ';
-    cout<<"--------------"<<endl;
-    while(t.size()){
-        int m = t.findMin();
-        cout<<m<<' ';
-        t.remove(m);
-    }
+    // for(int i : s) cout<<i<<' ';
+    // cout<<"--------------"<<endl;
+    // while(t.size()){
+    //     int m = t.findMin();
+    //     cout<<m<<' ';
+    //     t.remove(m);
+    // }
 
     // 内容是否一致
-    // for(int i : s){
-    //     int m1 = t.findMin();
-    //     t.remove(m1);
-    //     cout<<'('<<i<<','<<m1<<')'<<endl;
-    //     if(m1 != i){
-    //         cout<<"Insert or Remove Error"<<endl;
-    //         return false;
-    //     }
-    // }    
-    // cout<<"REMOVE SUCCESS"<<endl;
+    for(int i : s){
+        int m1 = t.findMin();
+        t.remove(m1);
+        cout<<'('<<i<<','<<m1<<')'<<endl;
+        if(m1 != i){
+            cout<<"Insert or Remove Error"<<endl;
+            return false;
+        }
+    }    
+    cout<<"REMOVE SUCCESS"<<endl;
 }
 
 int main(){
     RedBlackTree<int> rbt;
     // test_insert<RedBlackTree<int>, int>(rbt, 1000);
-    // test_remove<SplayTree<int>, int>(rbt, 10);
-    // test_insert_and_remove<SplayTree<int>>();
+    // test_remove<RedBlackTree<int>, int>(rbt, 100);
+    test_insert_and_remove<RedBlackTree<int>>();
 
-    int a[] = {10,85,15,70,20,60,30,50,65,80};
-    int len = sizeof(a) / sizeof(int);
-    for(int i = 0; i<len; i++){
-        rbt.insert(a[i]);
-        cout<<"insert "<<a[i]<<endl;
-        if(!rbt._check()) return 0;
-    }
+    // int a[] = {10,10,52,3,21};
+    // int len = sizeof(a) / sizeof(int);
+    // for(int i = 0; i<len; i++){
+    //     rbt.insert(a[i]);
+    //     cout<<"insert "<<a[i]<<endl;
+    //     if(!rbt._check()) return 0;
+    // }
     
     // for(int i = 0; i<len; i++){
     //     rbt.contain(a[i]);
@@ -371,17 +372,17 @@ int main(){
     //     cout<<"------------------------------------\n";
     // }
 
-    rbt._debug();
-    cout<<"---------------------------------\n";
+    // rbt._debug();
+    // cout<<"---------------------------------\n";
 
-    for(int i = 0; i<len; i++){
-        int m = rbt.findMax();
-        cout<<m<<endl;
-        rbt.remove(m);
-        rbt._debug();
-        cout<<(rbt._check() ? "OK" : "WRONG")<<endl;
-        cout<<"---------------------------------\n";
-    }
+    // for(int i = 0; i<len; i++){
+    //     int m = rbt.findMax();
+    //     cout<<m<<endl;
+    //     rbt.remove(m);
+    //     rbt._debug();
+    //     cout<<(rbt._check() ? "OK" : "WRONG")<<endl;
+    //     cout<<"---------------------------------\n";
+    // }
     // cout<<rbt.size();
     // rbt.remove(34);
     // cout<<rbt.size();

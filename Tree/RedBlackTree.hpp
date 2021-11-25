@@ -74,10 +74,10 @@ public:
         return num_back_r + (t->color == BLACK);
     }
 private:
-    Node*   doInsert(const Comparable& x, Node* t);
+    void    doInsert(const Comparable& x, Node* t);
     void    doRemove(const Comparable& x);
     void    transplant(Node* u, Node* v);       //用v替代u
-    Node*   insertFixup(Node* t);
+    void    insertFixup(Node* t);
     void    deleteFixup(Node* t);
     void    leftRotate(Node* t);
     void    rightRotate(Node* t);
@@ -90,7 +90,7 @@ private:
 template<typename Comparable>
 size_t RedBlackTree<Comparable>::insert(const Comparable& x){
     size_current++;
-    root = doInsert(x, root);
+    doInsert(x, root);
     return size_current;
 }
 
@@ -101,7 +101,7 @@ size_t RedBlackTree<Comparable>::remove(const Comparable& x){
 }
 
 template<typename Comparable>
-typename RedBlackTree<Comparable>::Node* RedBlackTree<Comparable>::doInsert(const Comparable& x, Node* t){
+void RedBlackTree<Comparable>::doInsert(const Comparable& x, Node* t){
     Node* new_node = new Node;
     new_node->element = x;
     new_node->left = dump;
@@ -121,24 +121,18 @@ typename RedBlackTree<Comparable>::Node* RedBlackTree<Comparable>::doInsert(cons
     
     if(p == dump){
         new_node->color = BLACK;
-        return new_node;
+        root = new_node;
+        return;
     }
 
     new_node->parent = p;
     if(x < p->element) p->left = new_node;
     else p->right = new_node;
-    return insertFixup(new_node);         //自底向上地修复
+    insertFixup(new_node);         //自底向上地修复
 }
 
 template<typename Comparable>
-typename RedBlackTree<Comparable>::Node* RedBlackTree<Comparable>::insertFixup(Node* t){
-    //根的虚拟的父节点
-    Node parent_root;
-    parent_root.color = BLACK;
-    parent_root.left = root;
-    parent_root.right = dump;
-    root->parent = &parent_root;
-
+void RedBlackTree<Comparable>::insertFixup(Node* t){
     while(t->parent->color == RED){
         Node* tp = t->parent;
         Node* tpp = t->parent->parent;
@@ -177,11 +171,7 @@ typename RedBlackTree<Comparable>::Node* RedBlackTree<Comparable>::insertFixup(N
         t->color = RED;
     }
 
-    //恢复根
-    Node* new_root = parent_root.left;
-    new_root->color = BLACK;
-    new_root->parent = dump;
-    return new_root;
+    root->color = BLACK;
 }
 
 template<typename Comparable>
@@ -345,5 +335,14 @@ void RedBlackTree<Comparable>::rightRotate(Node* t){
         if(tp->left == t) tp->left = l;
         else tp->right = l; 
     }
+}
+
+template<typename Comparable>
+RedBlackTree<Comparable>& RedBlackTree<Comparable>::operator=(const RedBlackTree& rhs){
+    if(this == &rhs) return *this;
+    clear();
+    size_current = rhs.size_current;
+    root = Helper::doCopy(rhs.root, nullptr);
+    return *this;
 }
 #endif

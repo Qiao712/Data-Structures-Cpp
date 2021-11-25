@@ -22,6 +22,12 @@
         "tuple": "cpp",
         "xlocale": "cpp",
         "xlocinfo": "cpp",
-        "xiosbase": "cpp"
+        "xiosbase": "cpp",
+        "functional": "cpp",
+        "future": "cpp",
+        "mutex": "cpp",
+        "thread": "cpp",
+        "unordered_map": "cpp",
+        "xhash": "cpp"
     }
 }
