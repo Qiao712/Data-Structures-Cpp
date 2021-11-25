@@ -1,181 +1,191 @@
 /*
  *  自顶向下伸展树， 比自底向上更易实现
+ *  不允许插入重复元素
 */
 #ifndef __SPLAY_TREE__
 #define __SPLAY_TREE__
-#include "BinarySearchTree.hpp"
+#include "BinaryTreeHelper.hpp"
 
 template <typename Comparable>
-class SplayTree : private BinarySearchTree<Comparable>
+class SplayTree
 {
-    using Node = typename BinarySearchTree<Comparable>::Node;
+    struct Node{
+        Comparable element;
+        Node* left = nullptr;
+        Node* right = nullptr;
+    };
 
+    using Helper = BinaryTreeHelper<Node>;
 public:
-    using BinarySearchTree<Comparable>::empty;                         
-    using BinarySearchTree<Comparable>::size;
-    using BinarySearchTree<Comparable>::clear;
+    SplayTree() = default;
+    SplayTree(const SplayTree& rhs){
+        size_current = rhs.size_current;
+        root = Helper::doCopy(rhs.root, nullptr);
+    }
 
-    const Comparable&    findMin(); //返回最小元素
-    const Comparable&    findMax(); //返回最大元素
-    bool                 contain(const Comparable &x); //复写contain，添加把被访问元素旋转上来的操作
-    bool                 remove(const Comparable &x);  //复写remove，使用把目标元素旋转上来的方式进行
-    void                 insert(const Comparable &x);  //SplayTree版本的插入
+    const Comparable&       findMin();
+    const Comparable&       findMax();
+    bool                    contain(const Comparable& x);
+    bool                    empty() const { return size_current == 0; }
+    size_t                  size() const { return size_current; }
+    void                    clear() { size_current = 0; Helper::doClear(root, nullptr); }
+
+    size_t                  insert(const Comparable& x);
+    size_t                  remove(const Comparable& x);     
+
+    SplayTree&              operator=(const SplayTree& rhs);
+
+    void _debug(){
+        Helper::doPrint(root, nullptr, 0);
+    }
 private:
-    using BinarySearchTree<Comparable>::root;
+    Node* doInsert(const Comparable& x, Node* t);
+    Node* splay(const Comparable& x, Node* t); //伸展，将元素x旋转到根上
 
-    Node *splay(const Comparable &x, Node *at); //伸展，将元素x旋转到根上
-
-    //Node *singleRotationLeft(Node *at); //单旋转
-    //Node *singleRotationRight(Node *at);
+    size_t size_current = 0;
+    Node*  root = nullptr;
+    Node *singleLeftRotate(Node *t); //单旋转
+    Node *singleRightRotate(Node *t);
 };
 
 template <typename Comparable>
 bool SplayTree<Comparable>::contain(const Comparable &x)
 {
+    if(root == nullptr) return false;
+
     root = splay(x,root);
 
-    if (root->element == x)
-        return true;
-    else
-        return false;
+    return (root->element == x);
 }
 
 template <typename Comparable>
-void SplayTree<Comparable>::insert(const Comparable &x)
-{
-    if(root == nullptr){
-        root = new Node;
-        root->element = x;
-        root->left = nullptr;
-        root->right = nullptr;
-        return;
-    }
-    root = splay(x, root);
-    Node* new_node = new Node;
-    new_node->element = x;
-
-    //若干新根小于 等于（和搜索时保持一致） 插入元素
-    if(root->element <= x){
-        new_node->left = root;
-        new_node->right = root->right;
-        root->right = nullptr;
-    }else{
-        new_node->right = root;
-        new_node->left = root->left;
-        root->left = nullptr;
-    }
-
-    root = new_node;
+SplayTree<Comparable>& SplayTree<Comparable>::operator=(const SplayTree& rhs){
+    if(this == &rhs) return *this;
+    clear();
+    size_current = rhs.size_current;
+    root = Helper::doCopy(rhs.root, nullptr);
+    return *this;
 }
 
-//核心算法--伸展
 template <typename Comparable>
-typename SplayTree<Comparable>::Node *SplayTree<Comparable>::splay(const Comparable &x, Node *at)
+typename SplayTree<Comparable>::Node* SplayTree<Comparable>::splay(const Comparable& x, Node* t)
 {
-    Node header;    //header->right 表示 L子树， header->left 表示 R子树
-    Node* max_of_left = &header;
-    Node* min_of_right = &header;
+    Node head;
+    Node* max_in_left = &head;
+    Node* min_in_right = &head;
 
-    //较简化的版本
-    while(at->element != x){
-        if(x < at->element){
-            if(at->left == nullptr) break;
-            Node* x = at;
-            Node* y = at->left;
-            x->left = nullptr;
-            
-            min_of_right->left = x;
-            min_of_right = x;
-            at = y;
-        }else if(x > at->element){
-            if(at->right == nullptr) break;
-            Node* x = at;
-            Node* y = at->right;
-            x->right = nullptr;
-            
-            max_of_left->right = x;
-            max_of_left = x;
-            at = y;
+    while(true){
+        if(x < t->element){
+            if(t->left == nullptr) break;
+
+            min_in_right->left = t;
+            min_in_right = t;
+            t = t->left;
+            min_in_right->left = nullptr;
+        }else if(t->element < x){
+            if(t->right == nullptr) break;
+
+            max_in_left->right = t;
+            max_in_left = t;
+            t = t->right;
+            max_in_left->right = nullptr;
+        }else{
+            break;
         }
     }
 
-    //最后组成一棵树
-    max_of_left->right = at->left;
-    min_of_right->left = at->right;
-    at->left  = header.right;
-    at->right = header.left;
+    min_in_right->left = t->right;
+    max_in_left->right = t->left;
+    t->left = head.right;
+    t->right = head.left;
+    return t;
+}
 
-    return at;
+template <typename Comparable>
+size_t SplayTree<Comparable>::insert(const Comparable& x){
+    root = doInsert(x, root);
+    return size_current;
+}
+
+template <typename Comparable>
+typename SplayTree<Comparable>::Node* SplayTree<Comparable>::doInsert(const Comparable& x, Node* t){
+    Node* node_new = new Node;
+    node_new->element = x;
+    node_new->left = nullptr;
+    node_new->right = nullptr;
+
+    size_current++;
+
+    if(t == nullptr){ 
+        return node_new;
+    }
+
+    Node* node = t;
+    while(true){
+        if(x < node->element){
+            if(node->left == nullptr){
+                node->left = node_new;
+                break;
+            }else{
+                node = node->left;
+            }
+        }else if(node->element < x){
+            if(node->right == nullptr){
+                node->right = node_new;
+                break;
+            }else{
+                node = node->right;
+            }
+        }else{
+            //不允许出现重复元素，否则splay会出现问题
+            size_current--;
+            break;
+        }
+    }
+
+    return t;
 }
 
 template <typename Comparable>
 const Comparable &SplayTree<Comparable>::findMin()
 {
-    const Comparable &x = BinarySearchTree<Comparable>::findMin();
+    const Comparable &x = Helper::doFindMin(root, nullptr)->element;
     
     //旋转上来
-    bool t;
-    int length;
     root = splay(x, root);
-
     return x;
 }
 
 template <typename Comparable>
 const Comparable &SplayTree<Comparable>::findMax()
 {
-    const Comparable &x = BinarySearchTree<Comparable>::findMax();
+    const Comparable &x = Helper::doFindMax(root, nullptr)->element;
     
     //旋转上来
-    bool t;
-    int length;
     root = splay(x, root);
-
     return x;
 }
 
 template <typename Comparable>
-bool SplayTree<Comparable>::remove(const Comparable &x)
+size_t SplayTree<Comparable>::remove(const Comparable &x)
 {
-    if (!contain(x)) return false;
-
-    BinarySearchTree<Comparable>::size_current--;
-
-    Node *right = root->right;
-    Node *left  = root->left;
-    delete root;
-
-    //没有左子树
-    if (left == nullptr){
-        root = right;
-        return true;
+    if(root != nullptr){
+        root = splay(x, root);
+        if(root->element == x){
+            Node* new_root;
+            if(root->left == nullptr){
+                new_root = root->right;
+            }else{
+                new_root = splay(x, root->left);  //使得root->left中最大的节点伸展到根，成为新的根节点（进而无右子节点）
+                new_root->right = root->right;
+            }
+            delete root;
+            root = new_root;
+            size_current--;
+        }
     }
-
-    root = left;                                    //成为新根
-    findMax();                                                                    //找到最大值并旋转上来
-    root->right = right;
-
-    return true;
+    
+    return size_current;
 }
-
-// template <typename Comparable>
-// typename SplayTree<Comparable>::Node *SplayTree<Comparable>::singleRotationLeft(Node *at)
-// {
-//     Node *k = at->left;
-//     at->left = k->right;
-//     k->right = at;
-
-//     return k;
-// }
-
-// template <typename Comparable>
-// typename SplayTree<Comparable>::Node *SplayTree<Comparable>::singleRotationRight(Node *at)
-// {
-//     Node *k = at->right;
-//     at->right = k->left;
-//     k->left = at;
-
-//     return k;
-// }
 
 #endif
