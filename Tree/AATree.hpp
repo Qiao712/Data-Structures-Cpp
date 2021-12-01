@@ -1,6 +1,6 @@
 #ifndef __AA_TREE__
 #define __AA_TREE__
-#include "BinaryTree.hpp"
+#include "BinaryTreeHelper.hpp"
 
 template<typename Comparable>
 struct NodeWithLevel{
