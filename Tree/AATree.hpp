@@ -2,90 +2,81 @@
 #define __AA_TREE__
 #include "BinaryTreeHelper.hpp"
 
-template<typename Comparable>
-struct NodeWithLevel{
-    Comparable element;
-    NodeWithLevel* right;
-    NodeWithLevel* left;
-    unsigned int level = 0;
-};
-
 template<typename Comparable> 
-class AATree : private BinaryTree<Comparable, NodeWithLevel<Comparable>>{
-    public:
-        using Node = NodeWithLevel<Comparable>;
+class AATree{
+    struct Node{
+        Comparable element;
+        Node* right;
+        Node* left;
+        unsigned int level = 0;
+    };
 
-        AATree():NIL(new Node()){
-            NIL->left = NIL;
-            NIL->right = NIL;
-            NIL->level = 0;
-            root = NIL;
+    using Helper = BinaryTreeHelper<Node>;
+public:
+    AATree():dump(new Node()){
+        dump->left = dump;
+        dump->right = dump;
+        dump->level = 0;
+        root = dump;
+    }
+    ~AATree(){clear();}
+
+    const Comparable&       findMin() const { return Helper::doFindMin(root, dump)->element; }
+    const Comparable&       findMax() const { return Helper::doFindMax(root, dump)->element; }
+    bool                    contain(const Comparable& x) const { return Helper::doFind(x, root, dump) != dump; }
+    bool                    empty() const { return size_current == 0;}
+    size_t                  size() const { return size_current; }
+    void                    clear() { size_current = 0; Helper::doClear(root, dump); }
+
+    void                    insert(const Comparable& x);
+    void                    remove(const Comparable& x);
+
+    bool _debug(){
+        print(root, 0, 0);
+        return _check(root);
+    }
+    void print(Node* t, int n, bool d){
+        if(t == dump){
+            return;
         }
-        ~AATree(){clear();}
 
-        const Comparable&       findMin() const { return doFindMin(root, NIL)->element; }
-        const Comparable&       findMax() const { return doFindMax(root, NIL)->element; }
-        bool                    contain(const Comparable& x) const { return doFind(x, root, NIL) != NIL; }
-        bool                    empty() const { return doCheckEmpty();}
-        size_t                  size() const { return size_current; }
-        void                    clear() { doClear(root, NIL); }
-        void                    insert(const Comparable& x);
-        void                    remove(const Comparable& x);
-
-        bool debug(){
-            print(root, 0, 0);
-            return check(root);
+        if(d == 1){
+            for(int i = 0; i<n; i++) cout<<"  ";
+            cout<<"L:"<<t->element<<' '<<t->level<<endl;
+        }else{
+            for(int i = 0; i<n; i++) cout<<"  ";
+            cout<<"R:"<<t->element<<' '<<t->level<<endl;
         }
-        void print(Node* t, int n, bool d){
-            if(t == NIL){
-                return;
-            }
+        print(t->left, n+1, 1);
+        print(t->right, n+1, 0);
+    }
+    //检查是否符合AATree
+    bool _check(Node* t){
+        if(t == dump) return true;
 
-            if(d == 1){
-                for(int i = 0; i<n; i++) cout<<"  ";
-                cout<<"L:"<<t->element<<' '<<t->level<<endl;
-            }else{
-                for(int i = 0; i<n; i++) cout<<"  ";
-                cout<<"R:"<<t->element<<' '<<t->level<<endl;
-            }
-            print(t->left, n+1, 1);
-            print(t->right, n+1, 0);
+        if(t->right != dump && t->right->level == t->level && t->right->right->level == t->level){
+            return false;
         }
-        //检查是否符合AATree
-        bool check(Node* t){
-            if(t == NIL) return true;
-
-            if(t->right != NIL && t->right->level == t->level && t->right->right->level == t->level){
-                return false;
-            }
-            if(t->left != NIL && t->level == t->left->level){
-                return false;
-            }
-            
-            return check(t->right) && check(t->left);
+        if(t->left != dump && t->level == t->left->level){
+            return false;
         }
-    private:
-        Node* doRemove(const Comparable& x, Node* t);
-        //用于在递归过程中储存 最底层实际删除的节点 和 要删除的目标节点
-        Node* last_ptr, *delete_ptr;
+        
+        return _check(t->right) && _check(t->left);
+    }
+private:
+    Node* doRemove(const Comparable& x, Node* t);
+    //用于在递归过程中储存 最底层实际删除的节点 和 要删除的目标节点
+    Node* last_ptr, *delete_ptr;
 
-        Node* doInsert(const Comparable& x, Node* t);
-        Node* skew(Node* x);
-        Node* split(Node* x);
-        Node* singleRightRotation(Node* x);
-        Node* singleLeftRotation(Node* x);
+    Node* doInsert(const Comparable& x, Node* t);
+    Node* skew(Node* x);
+    Node* split(Node* x);
+    Node* singleRightRotation(Node* x);
+    Node* singleLeftRotation(Node* x);
 
-        //共用的空节点
-        Node* NIL;
-
-        using BinaryTree<Comparable, Node>::doCheckEmpty;
-        using BinaryTree<Comparable, Node>::doClear;
-        using BinaryTree<Comparable, Node>::doCopy;
-        using BinaryTree<Comparable, Node>::doFindMax;
-        using BinaryTree<Comparable, Node>::doFindMin;
-        using BinaryTree<Comparable, Node>::doFind;
-        using BinaryTree<Comparable, Node>::root;
-        using BinaryTree<Comparable, Node>::size_current;
+    size_t size_current = 0;
+    Node* root;
+    Node* dump;        
 };
 
 template<typename Comparable>
@@ -106,8 +97,8 @@ void AATree<Comparable>::remove(const Comparable& x){
 
 template<typename Comparable>
 typename AATree<Comparable>::Node* AATree<Comparable>::doInsert(const Comparable& x, Node* t){
-    if(t == NIL){
-        Node* new_node = new Node{x, NIL, NIL, 1};
+    if(t == dump){
+        Node* new_node = new Node{x, dump, dump, 1};
         return new_node;
     }
 
@@ -124,8 +115,8 @@ typename AATree<Comparable>::Node* AATree<Comparable>::doInsert(const Comparable
 
 template<typename Comparable>
 typename AATree<Comparable>::Node* AATree<Comparable>::doRemove(const Comparable& x, Node* t){
-    if(t == NIL){
-        return NIL;
+    if(t == dump){
+        return dump;
     }
 
     //一直递归到树的最底层，并记录路径上找到的要被删除的目标的节点
@@ -142,7 +133,7 @@ typename AATree<Comparable>::Node* AATree<Comparable>::doRemove(const Comparable
         if(delete_ptr != last_ptr)
             delete_ptr->element = last_ptr->element;
         delete t;
-        return NIL;
+        return dump;
     }
 
     // if(t->left->level < t->level - 1){  //来自左边

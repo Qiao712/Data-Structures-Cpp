@@ -10,6 +10,7 @@ using namespace std;
 #include"Tree\AVLTree.hpp"
 #include"Tree\SplayTree.hpp"
 #include"Tree\RedBlackTree.hpp"
+#include"Tree\AATree.hpp"
 
 // struct Node{
 //     Node* l = nullptr;
@@ -353,18 +354,19 @@ bool test_remove(Tree& t, int n){
 }
 
 int main(){
-    RedBlackTree<int> rbt;
+    AATree<int> rbt;
     // test_insert<RedBlackTree<int>, int>(rbt, 1000);
     // test_remove<RedBlackTree<int>, int>(rbt, 100);
-    test_insert_and_remove<RedBlackTree<int>>();
+    // test_insert_and_remove<RedBlackTree<int>>();
 
-    // int a[] = {10,10,52,3,21};
-    // int len = sizeof(a) / sizeof(int);
-    // for(int i = 0; i<len; i++){
-    //     rbt.insert(a[i]);
-    //     cout<<"insert "<<a[i]<<endl;
-    //     if(!rbt._check()) return 0;
-    // }
+    int a[] = {10,10,52,3,21};
+    int len = sizeof(a) / sizeof(int);
+    for(int i = 0; i<len; i++){
+        rbt.insert(a[i]);
+        cout<<"insert "<<a[i]<<endl;
+        // if(!rbt._debug()) return 0;
+        // cout<<"------------------"<<endl;
+    }
     
     // for(int i = 0; i<len; i++){
     //     rbt.contain(a[i]);
@@ -379,8 +381,7 @@ int main(){
     //     int m = rbt.findMax();
     //     cout<<m<<endl;
     //     rbt.remove(m);
-    //     rbt._debug();
-    //     cout<<(rbt._check() ? "OK" : "WRONG")<<endl;
+    //     cout<<(rbt._debug() ? "OK" : "WRONG")<<endl;
     //     cout<<"---------------------------------\n";
     // }
     // cout<<rbt.size();
