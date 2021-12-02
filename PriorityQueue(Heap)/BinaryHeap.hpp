@@ -98,6 +98,7 @@ void BinaryHeap<Comparable>::percolateDown(UINT objective){
     Comparable objective_element = array[objective];
     
     UINT child;
+    
     UINT hole;
     for(hole = objective; getLeftChild(hole) <= size; hole = child){
         UINT left = getLeftChild(hole);
