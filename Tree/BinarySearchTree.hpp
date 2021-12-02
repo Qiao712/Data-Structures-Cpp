@@ -22,6 +22,7 @@ public:
         size_current = rhs.size_current;
         root = Helper::doCopy(rhs.root, nullptr);
     }
+    ~BinarySearchTree(){clear();}
 
     const Comparable&       findMin() const { return Helper::doFindMin(root, nullptr)->element; }
     const Comparable&       findMax() const { return Helper::doFindMax(root, nullptr)->element; }

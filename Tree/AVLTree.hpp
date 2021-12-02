@@ -22,6 +22,10 @@ public:
         size_current = rhs.size_current;
         root = Helper::doCopy(rhs.root, dump);
     }
+    ~AVLTree(){
+        clear();
+        delete dump;
+    }
 
     const Comparable&       findMin() const { return Helper::doFindMin(root, dump)->element; }
     const Comparable&       findMax() const { return Helper::doFindMax(root, dump)->element; }

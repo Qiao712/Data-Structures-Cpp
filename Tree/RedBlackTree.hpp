@@ -24,6 +24,10 @@ public:
         dump->parent = dump;
         root = dump;
     }
+    ~RedBlackTree(){
+        clear();
+        delete dump;
+    }
 
     const Comparable&       findMin() const { return Helper::doFindMin(root, dump)->element; }
     const Comparable&       findMax() const { return Helper::doFindMax(root, dump)->element; }

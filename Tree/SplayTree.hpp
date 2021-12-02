@@ -22,6 +22,7 @@ public:
         size_current = rhs.size_current;
         root = Helper::doCopy(rhs.root, nullptr);
     }
+    ~SplayTree(){clear();}
 
     const Comparable&       findMin();
     const Comparable&       findMax();

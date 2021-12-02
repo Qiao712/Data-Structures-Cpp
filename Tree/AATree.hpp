@@ -19,7 +19,10 @@ public:
         dump->level = 0;
         root = dump;
     }
-    ~AATree(){clear();}
+    ~AATree(){
+        clear();
+        delete dump;
+    }
 
     const Comparable&       findMin() const { return Helper::doFindMin(root, dump)->element; }
     const Comparable&       findMax() const { return Helper::doFindMax(root, dump)->element; }
