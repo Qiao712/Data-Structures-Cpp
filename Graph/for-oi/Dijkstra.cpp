@@ -13,62 +13,41 @@ struct Edge{
     int to = 0;
     int weight = 0;
 }edges[M];
-unsigned int length[N];  //记录长度
 int head[N];
 int p;
 int n,m;
 
-bool known[N];
-int num;    //优先队列中实际有效的节点的个数    --   因为无法直接删除该节点在原来优先队列中的记录
-bool inQueue[N];    //是否在优先队列中（实际有效的）
+unsigned int lengths[N];  //记录长度
 void shortest(int s){
     priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>> > pq;
-    for(int i = 0; i<=n; i++) length[i] = INT_MAX;
+    fill(lengths, lengths + n + 1, INT_MAX);
 
-    length[s] = 0;
-    pq.emplace(length[s],s);
-    num++;
-    inQueue[s] = true;
+    lengths[s] = 0;
+    pq.emplace(lengths[s],s);
 
-    int c,nxt;
-    while(num){
-        c = pq.top().second;
+    int len, v;
+    int known = 0;                             //已知道节点数
+    while(!pq.empty()){
+        len = pq.top().first;
+        v = pq.top().second;
         pq.pop();
 
-        //防止队列里的废弃的距离被使用
-        if(known[c]) continue;
+        if(lengths[v] < len) continue;         //堆中无效的记录（lengths已经被更新了，但堆里的值还在，是无效的，抛弃）
+                                               //细节：不能用<=，否则会使初始时的第一个队内节点被略过
 
-        num--;
-        known[c] = true;
-
-        for(int i = head[c]; i != NONE; i = edges[i].next){
-            nxt = edges[i].to;
-            
-            if(!known[nxt] && length[nxt] > length[c] + edges[i].weight){
-                length[nxt] = length[c] + edges[i].weight;
-
-                //没有加入过队列
-                if(!inQueue[nxt]){
-                    num++;  //队列中实际有效节点数量加一
-                    inQueue[nxt] = true;
-                }
-                pq.emplace(length[nxt],nxt);    //将该距离记录到优先队列中
+        
+        for(int p = head[v]; p != 0; p = edges[p].next){
+            int to = edges[p].to, w = edges[p].weight;
+            if(lengths[to] > lengths[v] + w){
+                lengths[to] = lengths[v] + w;
+                pq.emplace(lengths[to], to);
             }
         }
     }
 }
 
-int visit[N];
-void print(int r){
-    if(visit[r]) return;
-    visit[r] = true;
-    cout<<r<<endl;
-    for(int i = head[r]; i != NONE; i = edges[i].next){
-        print(edges[i].to);
-    }
-}
-
 int main(){
+    freopen("1.txt", "r", stdin);
     int s;
     cin>>n>>m>>s;
 
@@ -89,7 +68,7 @@ int main(){
     shortest(s);
 
     for(int i = 1; i<=n; i++){
-        cout<<length[i]<<' ';
+        cout<<lengths[i]<<' ';
     }
 
     return 0;
