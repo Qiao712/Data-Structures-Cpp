@@ -6,11 +6,12 @@
 #include<limits>
 using namespace std;
 
-#include"Tree\BinarySearchTree.hpp"
-#include"Tree\AVLTree.hpp"
-#include"Tree\SplayTree.hpp"
-#include"Tree\RedBlackTree.hpp"
-#include"Tree\AATree.hpp"
+#include"Tree/BinarySearchTree.hpp"
+#include"Tree/AVLTree.hpp"
+#include"Tree/SplayTree.hpp"
+#include"Tree/RedBlackTree.hpp"
+#include"Tree/AATree.hpp"
+#include"AlgorithmAnalysis/BinarySearch.hpp"
 
 // struct Node{
 //     Node* l = nullptr;
@@ -214,7 +215,7 @@ bool test_insert_and_remove(){
                 cout<<m<<' ';
                 t.remove(m);
             }
-            cout<<"vs\n";
+            cout<<"vs/n";
             for(int i : s) cout<<i<<' ';
             cout<<endl;
 
@@ -354,37 +355,55 @@ bool test_remove(Tree& t, int n){
 }
 
 int main(){
-    AATree<int> rbt;
+    // AATree<int> rbt;
     // test_insert<RedBlackTree<int>, int>(rbt, 1000);
     // test_remove<RedBlackTree<int>, int>(rbt, 100);
     // test_insert_and_remove<RedBlackTree<int>>();
 
-    int a[] = {10,10,52,3,21};
-    int len = sizeof(a) / sizeof(int);
-    for(int i = 0; i<len; i++){
-        rbt.insert(a[i]);
-        cout<<"insert "<<a[i]<<endl;
-        // if(!rbt._debug()) return 0;
-        // cout<<"------------------"<<endl;
-    }
+    // int a[] = {10,10,52,3,21};
+    // int len = sizeof(a) / sizeof(int);
+    // for(int i = 0; i<len; i++){
+    //     rbt.insert(a[i]);
+    //     cout<<"insert "<<a[i]<<endl;
+    //     // if(!rbt._debug()) return 0;
+    //     // cout<<"------------------"<<endl;
+    // }
     
     // for(int i = 0; i<len; i++){
     //     rbt.contain(a[i]);
     //     rbt._debug();
-    //     cout<<"------------------------------------\n";
+    //     cout<<"------------------------------------/n";
     // }
 
     // rbt._debug();
-    // cout<<"---------------------------------\n";
+    // cout<<"---------------------------------/n";
 
     // for(int i = 0; i<len; i++){
     //     int m = rbt.findMax();
     //     cout<<m<<endl;
     //     rbt.remove(m);
     //     cout<<(rbt._debug() ? "OK" : "WRONG")<<endl;
-    //     cout<<"---------------------------------\n";
+    //     cout<<"---------------------------------/n";
     // }
     // cout<<rbt.size();
     // rbt.remove(34);
     // cout<<rbt.size();
+
+    const int N = 10000;
+    int a[N];
+    for(int i = 0; i<N; i++){
+        a[i] = rand()%N;
+    }
+    sort(a, a+N);
+    
+    for(int i = 0; i<N; i++){
+        int val = rand()%N;
+        int x = std::lower_bound(a,a+N, val) - a;
+        int y = lower_bound(a, N, val);
+        if(x != y){
+            cout<<"ERROR";
+            break;
+        }
+    }
+    cout<<"DONE"<<endl;
 }
