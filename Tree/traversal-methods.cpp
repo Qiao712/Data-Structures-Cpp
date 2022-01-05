@@ -14,7 +14,7 @@ struct Node{
     int element;
     Node* l = nullptr;
     Node* r = nullptr;
-    bool isVisited = 0;
+    // bool isVisited = 0;
 };
 
 //后序遍历-非递归
@@ -48,53 +48,49 @@ void postorderTraversal_recursion(Node* t){
     cout<<t->element<<' ';
 }
 
-//中序遍历-非递归的
-bool isVisited(Node* n){
-    return n->isVisited;
-}
-void inorderTraversal(Node* t){
-    stack<Node*> s1;
-    s1.push(t);
+// //中序遍历-非递归的
+// bool isVisited(Node* n){
+//     return n->isVisited;
+// }
+// void inorderTraversal(Node* t){
+//     stack<Node*> s1;
+//     s1.push(t);
 
-    Node* tmp;
-    while(!s1.empty()){
-        tmp = s1.top();
+//     Node* tmp;
+//     while(!s1.empty()){
+//         tmp = s1.top();
         
-        if(tmp->l == nullptr || isVisited(tmp->l)){
-            s1.pop();
-            tmp->isVisited = true;
+//         if(tmp->l == nullptr || isVisited(tmp->l)){
+//             s1.pop();
+//             tmp->isVisited = true;
             
-            //do
-            cout<<tmp->element<<' ';
+//             //do
+//             cout<<tmp->element<<' ';
 
-            if(tmp->r != nullptr) s1.push(tmp->r);
-        }else{
-            s1.push(tmp->l);
-        }
-    }
-}
+//             if(tmp->r != nullptr) s1.push(tmp->r);
+//         }else{
+//             s1.push(tmp->l);
+//         }
+//     }
+// }
 
-//中序遍历-非递归的-无需标记
-void inorderTraversal_non_record(Node* t){
+//中序遍历-非递归的
+void inorderTraversal(Node* t){
     stack<Node*> s;
 
-    do{
-        //t:当前遍历到的节点,一直向左节点移动,一直移动到最左端
-        while(t != nullptr){
-            s.push(t);
-            t = t->l;   //向左节点移动
-        }
-        
-        //按出栈的顺序访问靠左的节点
-        if(!s.empty()){
-            t = s.top();
+    Node* pre = t;  //记录栈顶节点的未访问的中序前驱， 初始时为根
+    while(pre != nullptr || !s.empty()){
+        if(pre == nullptr){     //栈顶节点无未访问的前驱，访问栈顶节点
+            Node* top = s.top();
             s.pop();
+            cout<<top->element;
 
-            cout<<t->element<<' ';
-            
-            t = t->r;   //下一个要中序访问的子树，即其右节点
+            pre = top->r;       //新的栈顶节点的未访问前驱即该节点的右子节点
+        }else{      //栈顶节点有未访问的前驱
+            s.push(pre);    //该前驱入栈，看有无该前驱的前驱
+            pre = pre->l;
         }
-    }while(!s.empty() || t != nullptr);
+    }
 }
 
 //递归-中序遍历
@@ -138,8 +134,6 @@ int main(){
     n[4].l = &n[5];
 
     inorderTraversal(&n[0]);
-    cout<<endl;
-    inorderTraversal_non_record(&n[0]);
     cout<<endl;
     inorderTraversal_recursion(&n[0]);
     cout<<endl;
