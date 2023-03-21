@@ -14,6 +14,11 @@ int upper_bound(const Element a[], int n, const Element& x){
     }
 
     return r;   //等价于 l+1
+    //r始终指向大于x的某个元素（或尾后）
+    //l始终指向小于或等于x的某个元素的后驱（l=0时，首前哑节点的后驱）
+    //y∈[0,l) , y<=x 已排除
+    //y∈[r, ) , y>x  a[r]可能是 
+    //l = r时，a[r]大于x而a[l-1]小于或等于x，已找到答案，返回。
 }
 
 //序列a升序，返回其中第一个 大于等于x的元素 的下标 [0, n) (std::lower_bound)

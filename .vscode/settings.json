@@ -30,6 +30,7 @@
         "unordered_map": "cpp",
         "xhash": "cpp",
         "queue": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "unordered_set": "cpp"
     }
 }
